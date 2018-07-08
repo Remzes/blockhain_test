@@ -1,9 +1,15 @@
 import React from 'react'
+import 'babel-polyfill'
+import {Provider} from 'react-redux'
+import store from '../store'
+
 import CombineContainer from './CombineContainer'
 
 export const App = () => {
   return (
-    <CombineContainer />
+    <Provider store={store}>
+      <CombineContainer/>
+    </Provider>
   )
 }
 
