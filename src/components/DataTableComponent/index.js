@@ -1,32 +1,32 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {loadAllUsers} from "../../AC/index"
 import TableHead from './TableHeadComponent'
 import TableBody from './TableBodyComponent'
-
-const USERS = [
-  {
-    id: 1,
-    email: 'doe@gmail.com',
-    name: 'John Doe',
-    status: 'unsent'
-  },
-  {
-    id: 2,
-    email: 'john@gmail.com',
-    name: 'Anton Chekhov',
-    status: 'unsent'
-  }
-];
+import Loader from '../Loader'
 
 const CLASS_NAME = 'data-table-container'
-export default class DataTable extends Component {
+class DataTable extends Component {
+  componentDidMount() {
+    const {users} = this.props
+
+    if (!users.pending && !users.fulfilled) {
+      this.props.loadAllUsers()
+    }
+  }
+
   render() {
+    const {pending, values, error} = this.props.users
+    if (pending) return <Loader />
     return (
       <section className={CLASS_NAME}>
         <table className={`${CLASS_NAME}__table`}>
           <TableHead />
-          <TableBody users={USERS}/>
+          <TableBody users={values}/>
         </table>
       </section>
     )
   }
 }
+
+export default connect(({users}) => ({users}), {loadAllUsers})(DataTable)
