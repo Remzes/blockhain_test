@@ -1,11 +1,18 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {selectUser} from "../../../AC/index"
 import Column from '../ColumnComponent'
+import HTMLLinkTagDecorator from "../../../decorators/HTMLLinkTagDecorator/index";
 
-const Row = ({user}) => {
+const Row = ({user, ...rest}) => {
   return (
     <tr>
       <td>
-        Select
+        <HTMLLinkTagDecorator
+          text="Select"
+          className="select-user"
+          onClick={rest.selectUser.bind(null, user.id)}
+        />
       </td>
       <Column text={user.email}/>
       <Column text={user.name}/>
@@ -17,4 +24,4 @@ const Row = ({user}) => {
   )
 }
 
-export default Row
+export default connect(null, {selectUser})(Row)

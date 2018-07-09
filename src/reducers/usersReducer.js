@@ -1,20 +1,19 @@
 import {LOAD_ALL_USERS, PENDING, FULFILLED, REJECTED} from '../constants'
-import {OrderedMap, Record} from 'immutable'
+import {Record} from 'immutable'
 import {convertArrayToMap} from "../helpers/convertArrayToMap"
-import {convertMapToArray} from "../helpers/convertMapToArray"
 
 const UserRecord = Record({
   id: undefined,
   email: undefined,
   name: undefined,
-  sent: undefined
+  status: undefined
 })
 
 const InitialState = Record({
   pending: false,
   fulfilled: false,
   error: null,
-  values: new OrderedMap({})
+  values: convertArrayToMap([], UserRecord)
 })
 
 const defaultState = new InitialState()
@@ -26,11 +25,11 @@ export default (state = defaultState, action) => {
       return state.set('pending', true)
 
     case LOAD_ALL_USERS + FULFILLED:
-      console.log(payload.data)
+      const {data} = payload
       return state
-        .set('values', convertArrayToMap(payload.data, UserRecord))
         .set('pending', false)
-        .set('loaded', false)
+        .set('fulfilled', true)
+        .update('values', values => convertArrayToMap(data, UserRecord).merge(values))
       break;
 
     case LOAD_ALL_USERS + REJECTED:

@@ -1,7 +1,8 @@
 import {OrderedMap, Map} from 'immutable'
 
-export function convertArrayToMap(arr, DataRecord = Map) {
-  return arr.reduce((acc, item) =>
-      acc.set(item.id, new DataRecord(item)),
+export function convertArrayToMap(arr, Record = Map) {
+  return arr.reduce((acc, item) => {
+      return acc.set(item.id, new Record(item))
+    },
     new OrderedMap({}))
 }
